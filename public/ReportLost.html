@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Report Lost Item</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f7fafc; color: #111827; padding: 24px; }
+    .container { max-width: 760px; margin: 0 auto; }
+    .card { background: #ffffff; border-radius: 18px; padding: 28px; box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08); }
+    h1 { font-size: 28px; margin-bottom: 8px; }
+    .subtitle { color: #6b7280; margin-bottom: 20px; }
+    .form-group { margin-bottom: 18px; }
+    label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; }
+    input[type=text], input[type=date], select, textarea { width: 100%; padding: 12px 14px; border: 1px solid #d1d5db; border-radius: 12px; font-size: 14px; }
+    textarea { min-height: 120px; resize: vertical; }
+    input:focus, textarea:focus, select:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
+    input.error, textarea.error, select.error { border-color: #b91c1c; }
+    .error-msg { color: #b91c1c; font-size: 13px; margin-top: 6px; }
+    .success-msg { background: #ecfdf5; color: #166534; border: 1px solid #bbf7d0; padding: 14px 16px; border-radius: 12px; margin-bottom: 20px; }
+    button { width: 100%; padding: 14px 16px; background: #2563eb; color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; }
+    button:hover { background: #1d4ed8; }
+    button:disabled { background: #9ca3af; cursor: not-allowed; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 640px) { .grid-2 { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <h1>Report Lost Item</h1>
+      <p class="subtitle">Fill in the details about your lost item so others can help you find it.</p>
+
+      <form id="reportForm" enctype="multipart/form-data">
+        <!-- Success/Error Messages -->
+        <div id="messageContainer"></div>
+
+        <!-- Item Name -->
+        <div class="form-group">
+          <label for="itemName">Item Name *</label>
+          <input
+            id="itemName"
+            type="text"
+            name="itemName"
+            maxlength="100"
+            placeholder="e.g. Black Laptop Bag"
+            required
+          />
+        </div>
+
+        <!-- Description -->
+        <div class="form-group">
+          <label for="description">Description *</label>
+          <textarea
+            id="description"
+            name="description"
+            maxlength="500"
+            placeholder="Color, brand, unique features... (min 10 characters)"
+            required
+          ></textarea>
+        </div>
+
+        <!-- Category & Date -->
+        <div class="grid-2">
+          <div class="form-group">
+            <label for="category">Category *</label>
+            <select id="category" name="category" required>
+              <option value="">Select category</option>
+              <option value="ID">ID</option>
+              <option value="Electronics">Electronics</option>
+              <option value="Books">Books</option>
+              <option value="Bags">Bags</option>
+              <option value="Others">Others</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="dateLost">Date Lost *</label>
+            <input
+              id="dateLost"
+              type="date"
+              name="dateLost"
+              max="2026-04-05"
+              required
+            />
+          </div>
+        </div>
+
+        <!-- Location -->
+        <div class="form-group">
+          <label for="location">Location Lost *</label>
+          <input
+            id="location"
+            type="text"
+            name="location"
+            maxlength="200"
+            placeholder="e.g. Library, Building A"
+            required
+          />
+        </div>
+
+        <!-- Image Upload -->
+        <div class="form-group">
+          <label for="image">Upload Image (JPG, PNG — max 5MB)</label>
+          <input
+            id="image"
+            type="file"
+            name="image"
+            accept="image/jpeg,image/png,image/gif,image/webp"
+          />
+        </div>
+
+        <!-- Contact -->
+        <div class="form-group">
+          <label for="contact">Contact Information *</label>
+          <input
+            id="contact"
+            type="text"
+            name="contact"
+            maxlength="255"
+            placeholder="Email or phone number"
+            required
+          />
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" id="submitBtn">Submit Report</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('reportForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const submitBtn = document.getElementById('submitBtn');
+      const originalText = submitBtn.textContent;
+
+      // Clear previous messages
+      clearMessages();
+
+      // Client-side validation
+      const errors = validateForm();
+      if (Object.keys(errors).length > 0) {
+        displayErrors(errors);
+        return;
+      }
+
+      // Disable button and show loading
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Submitting...';
+
+      try {
+        const formData = new FormData(this);
+
+        const response = await fetch('/api/reportLost', {
+          method: 'POST',
+          body: formData
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          displaySuccess(result.message);
+          this.reset(); // Clear the form
+        } else {
+          displayErrors(result.errors || { general: result.message });
+        }
+
+      } catch (error) {
+        console.error('Submission error:', error);
+        displayErrors({ general: 'Network error. Please check your connection and try again.' });
+      } finally {
+        // Re-enable button
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+      }
+    });
+
+    function validateForm() {
+      const errors = {};
+
+      const itemName = document.getElementById('itemName').value.trim();
+      const description = document.getElementById('description').value.trim();
+      const category = document.getElementById('category').value;
+      const dateLost = document.getElementById('dateLost').value;
+      const location = document.getElementById('location').value.trim();
+      const contact = document.getElementById('contact').value.trim();
+
+      if (!itemName) {
+        errors.itemName = 'Item name is required';
+      } else if (itemName.length < 3) {
+        errors.itemName = 'Item name must be at least 3 characters';
+      } else if (itemName.length > 100) {
+        errors.itemName = 'Item name must be under 100 characters';
+      }
+
+      if (!description) {
+        errors.description = 'Description is required';
+      } else if (description.length < 10) {
+        errors.description = 'Description must be at least 10 characters';
+      } else if (description.length > 500) {
+        errors.description = 'Description must be under 500 characters';
+      }
+
+      if (!category) {
+        errors.category = 'Select a category';
+      }
+
+      if (!dateLost) {
+        errors.dateLost = 'Date is required';
+      } else if (new Date(dateLost) > new Date()) {
+        errors.dateLost = 'Date cannot be in the future';
+      }
+
+      if (!location) {
+        errors.location = 'Location is required';
+      } else if (location.length < 2) {
+        errors.location = 'Location must be at least 2 characters';
+      }
+
+      if (!contact) {
+        errors.contact = 'Contact info is required';
+      } else if (!isValidContact(contact)) {
+        errors.contact = 'Enter a valid email or phone number';
+      }
+
+      return errors;
+    }
+
+    function isValidContact(contact) {
+      if (contact.includes('@')) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact);
+      }
+      return /^\+?[\d\s\-()]{7,15}$/.test(contact);
+    }
+
+    function displayErrors(errors) {
+      clearMessages();
+
+      // Display general error if present
+      if (errors.general) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'error-msg';
+        messageDiv.style.cssText = 'background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; padding: 14px 16px; border-radius: 12px; margin-bottom: 20px;';
+        messageDiv.textContent = errors.general;
+        document.getElementById('messageContainer').appendChild(messageDiv);
+      }
+
+      // Display field-specific errors
+      Object.keys(errors).forEach(fieldId => {
+        if (fieldId === 'general') return;
+
+        const field = document.getElementById(fieldId);
+        if (field) {
+          field.classList.add('error');
+          const errorDiv = document.createElement('div');
+          errorDiv.className = 'error-msg';
+          errorDiv.textContent = errors[fieldId];
+          field.parentNode.appendChild(errorDiv);
+        }
+      });
+    }
+
+    function displaySuccess(message) {
+      clearMessages();
+
+      const messageDiv = document.createElement('div');
+      messageDiv.className = 'success-msg';
+      messageDiv.textContent = message;
+      document.getElementById('messageContainer').appendChild(messageDiv);
+    }
+
+    function clearMessages() {
+      // Clear message container
+      document.getElementById('messageContainer').innerHTML = '';
+
+      // Clear field errors
+      document.querySelectorAll('.error-msg').forEach(el => el.remove());
+      document.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
+    }
+  </script>
+</body>
+</html>
