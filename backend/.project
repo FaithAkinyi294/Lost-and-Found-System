@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+    <name>lost-and-found-jsp</name>
+    <comment>Maven Web Application for Lost and Found System</comment>
+    <projects/>
+    <buildSpec>
+        <buildCommand>
+            <name>org.eclipse.m2e.core.maven2Builder</name>
+            <arguments/>
+        </buildCommand>
+    </buildSpec>
+    <natures>
+        <nature>org.eclipse.m2e.core.maven2Nature</nature>
+        <nature>org.eclipse.jem.workbench.JavaEMFNature</nature>
+        <nature>org.eclipse.wst.common.modulecore.ModuleCoreNature</nature>
+        <nature>org.eclipse.wst.common.project.facet.core.nature</nature>
+        <nature>org.eclipse.wst.jsdt.core.jsNature</nature>
+        <nature>org.eclipse.wst.web.core.webNature</nature>
+    </natures>
+    <linkedResources>
+        <link>
+            <name>src/main/java</name>
+            <type>2</type>
+            <locationURI>PARENT-1-PROJECT_LOC/src/main/java</locationURI>
+        </link>
+        <link>
+            <name>src/main/resources</name>
+            <type>2</type>
+            <locationURI>PARENT-1-PROJECT_LOC/src/main/resources</locationURI>
+        </link>
+        <link>
+            <name>src/main/webapp</name>
+            <type>2</type>
+            <locationURI>PARENT-1-PROJECT_LOC/src/main/webapp</locationURI>
+        </link>
+        <link>
+            <name>src/test/java</name>
+            <type>2</type>
+            <locationURI>PARENT-1-PROJECT_LOC/src/test/java</locationURI>
+        </link>
+        <link>
+            <name>src/test/resources</name>
+            <type>2</type>
+            <locationURI>PARENT-1-PROJECT_LOC/src/test/resources</locationURI>
+        </link>
+    </linkedResources>
+</projectDescription>

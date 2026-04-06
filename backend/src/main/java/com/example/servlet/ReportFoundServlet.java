@@ -13,16 +13,16 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
-@WebServlet(name = "ReportServlet", urlPatterns = {"/reportLost"})
+@WebServlet(name = "ReportFoundServlet", urlPatterns = {"/reportFound"})
 @MultipartConfig(fileSizeThreshold = 1024 * 1024, maxFileSize = 5 * 1024 * 1024, maxRequestSize = 6 * 1024 * 1024)
-public class ReportServlet extends HttpServlet {
+public class ReportFoundServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type");
-        request.getRequestDispatcher("/ReportLost.jsp").forward(request, response);
+        request.getRequestDispatcher("/ReportFound.jsp").forward(request, response);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class ReportServlet extends HttpServlet {
             response.getWriter().write(json);
         } else {
             // In a real app, save to database here
-            String message = "Lost item reported successfully!";
+            String message = "Found item reported successfully!";
             String json = "{\"success\": true, \"message\": \"" + message + "\"}";
             response.getWriter().write(json);
         }
@@ -78,25 +78,25 @@ public class ReportServlet extends HttpServlet {
             errors.put("category", "Select a category");
         }
 
-        String dateLost = request.getParameter("dateLost");
-        if (dateLost == null || dateLost.isEmpty()) {
-            errors.put("dateLost", "Date lost is required");
+        String dateFound = request.getParameter("dateFound");
+        if (dateFound == null || dateFound.isEmpty()) {
+            errors.put("dateFound", "Date found is required");
         } else {
             try {
-                LocalDate date = LocalDate.parse(dateLost);
+                LocalDate date = LocalDate.parse(dateFound);
                 if (date.isAfter(LocalDate.now())) {
-                    errors.put("dateLost", "Date cannot be in the future");
+                    errors.put("dateFound", "Date cannot be in the future");
                 }
             } catch (Exception e) {
-                errors.put("dateLost", "Invalid date format");
+                errors.put("dateFound", "Invalid date format");
             }
         }
 
-        String location = trim(request.getParameter("location"));
-        if (location.isEmpty()) {
-            errors.put("location", "Location lost is required");
-        } else if (location.length() < 2) {
-            errors.put("location", "Location must be at least 2 characters");
+        String locationFound = trim(request.getParameter("locationFound"));
+        if (locationFound.isEmpty()) {
+            errors.put("locationFound", "Location found is required");
+        } else if (locationFound.length() < 2) {
+            errors.put("locationFound", "Location must be at least 2 characters");
         }
 
         String contact = trim(request.getParameter("contact"));
