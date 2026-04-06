@@ -19,6 +19,9 @@ public class ReportServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type");
         String path = request.getServletPath();
         if ("/reportFound".equals(path)) {
             request.getRequestDispatcher("/ReportFound.jsp").forward(request, response);
@@ -28,21 +31,34 @@ public class ReportServlet extends HttpServlet {
     }
 
     @Override
+    protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type");
+        response.setStatus(HttpServletResponse.SC_OK);
+    }
+
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type");
         request.setCharacterEncoding("UTF-8");
         String path = request.getServletPath();
         boolean isLostReport = "/reportLost".equals(path);
         Map<String, String> errors = validate(request, isLostReport);
 
         if (!errors.isEmpty()) {
-            request.setAttribute("errors", errors);
-            dispatchToPage(request, response, isLostReport);
-            return;
+            String json = "{\"success\": false, \"errors\": " + mapToJson(errors) + "}";
+            response.getWriter().write(json);
+        } else {
+            // In a real app, save to database here
+            String message = isLostReport ? "Lost item reported successfully!" : "Found item reported successfully!";
+            String json = "{\"success\": true, \"message\": \"" + message + "\"}";
+            response.getWriter().write(json);
         }
-
-        // In a real app, save to database here
-        request.setAttribute("successMessage", isLostReport ? "Lost item reported successfully!" : "Found item reported successfully!");
-        dispatchToPage(request, response, isLostReport);
     }
 
     private Map<String, String> validate(HttpServletRequest request, boolean isLostReport) throws ServletException, IOException {
@@ -150,8 +166,15 @@ public class ReportServlet extends HttpServlet {
         return null;
     }
 
-    private void dispatchToPage(HttpServletRequest request, HttpServletResponse response, boolean isLostReport) throws ServletException, IOException {
-        String destination = isLostReport ? "/ReportLost.jsp" : "/ReportFound.jsp";
-        request.getRequestDispatcher(destination).forward(request, response);
+    private String mapToJson(Map<String, String> map) {
+        StringBuilder sb = new StringBuilder("{");
+        boolean first = true;
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            if (!first) sb.append(",");
+            sb.append("\"").append(entry.getKey()).append("\": \"").append(entry.getValue().replace("\"", "\\\"")).append("\"");
+            first = false;
+        }
+        sb.append("}");
+        return sb.toString();
     }
 }
