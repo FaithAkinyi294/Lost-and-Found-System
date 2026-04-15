@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="4.0" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd">
+    <servlet>
+        <servlet-name>ReportFoundServlet</servlet-name>
+        <servlet-class>Servlets.ReportFoundServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ReportLostServlet</servlet-name>
+        <servlet-class>Servlets.ReportLostServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ReportServlet</servlet-name>
+        <servlet-class>Servlets.ReportServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ReportBean</servlet-name>
+        <servlet-class>beans.ReportBean</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ReportFoundServlet</servlet-name>
+        <url-pattern>/ReportFoundServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ReportLostServlet</servlet-name>
+        <url-pattern>/ReportLostServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ReportServlet</servlet-name>
+        <url-pattern>/ReportServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ReportServlet</servlet-name>
+        <url-pattern>/report</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ReportBean</servlet-name>
+        <url-pattern>/ReportBean</url-pattern>
+    </servlet-mapping>
+    <session-config>
+        <session-timeout>
+            30
+        </session-timeout>
+    </session-config>
+</web-app>
