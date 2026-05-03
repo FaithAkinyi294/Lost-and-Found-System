@@ -15,6 +15,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="refresh" content="5;url=<%= request.getContextPath() %>/home">
         <title>Submission Successful</title>
         <style>
             body { margin: 0; font-family: Arial, sans-serif; background: #eef2f7; color: #1f2a37; }
@@ -35,9 +36,10 @@
                 <div class="badge">Success</div>
                 <h1><%= label %> report submitted</h1>
                 <p>Your report has been uploaded successfully.</p>
+                <p style="color: #475467; margin: 0 0 18px;">You will be returned to the homepage automatically in 5 seconds.</p>
                 <div class="actions">
                     <a class="btn" href="<%= request.getContextPath() %>/report?type=<%= type %>">Submit Another <%= label %> Report</a>
-                    <a class="btn secondary" href="<%= request.getContextPath() %>/index.jsp">Back to Home</a>
+                    <a class="btn secondary" href="<%= request.getContextPath() %>/home">Back to Home</a>
                 </div>
             </div>
         </div>

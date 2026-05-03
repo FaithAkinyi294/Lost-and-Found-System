@@ -7,6 +7,39 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Report Found Item</title>
         <style>
+            .nav {
+                background: #fff;
+                border-bottom: 1px solid #e4e7ec;
+                padding: 12px 0;
+                position: sticky;
+                top: 0;
+                z-index: 10;
+            }
+            .nav .container {
+                max-width: 900px;
+                margin: 0 auto;
+                padding: 0 16px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .nav .logo {
+                font-weight: bold;
+                font-size: 1.2rem;
+                color: #1d2939;
+            }
+            .nav .menu {
+                display: flex;
+                gap: 20px;
+            }
+            .nav a {
+                color: #475467;
+                text-decoration: none;
+                font-weight: 500;
+            }
+            .nav a:hover {
+                color: #1d2939;
+            }
             :root { color-scheme: light; }
             body { margin: 0; font-family: Arial, sans-serif; background: #f4f6f9; color: #222; }
             .container { max-width: 760px; margin: 24px auto; padding: 16px; }
@@ -37,10 +70,26 @@
         </style>
     </head>
     <body>
+        <nav class="nav">
+            <div class="container">
+                <div class="logo">Lost & Found</div>
+                <div class="menu">
+                    <a href="${pageContext.request.contextPath}/">Home</a>
+                    <a href="${pageContext.request.contextPath}/report?type=LOST">Report Lost</a>
+                    <a href="${pageContext.request.contextPath}/report?type=FOUND">Report Found</a>
+                </div>
+            </div>
+        </nav>
         <div class="container">
             <div class="card">
                 <h1>Report Found Item</h1>
                 <p class="hint">Submit details so the owner can identify and claim the item.</p>
+                <% if (request.getAttribute("errors") != null && ((java.util.Map) request.getAttribute("errors")).get("database") != null) { %>
+                    <div class="msg error"><%= ((java.util.Map) request.getAttribute("errors")).get("database") %></div>
+                <% } %>
+                <% if (request.getAttribute("errors") != null && ((java.util.Map) request.getAttribute("errors")).get("general") != null) { %>
+                    <div class="msg error"><%= ((java.util.Map) request.getAttribute("errors")).get("general") %></div>
+                <% } %>
 
                 <form id="foundForm" action="${pageContext.request.contextPath}/report" method="post" enctype="multipart/form-data" novalidate>
                     <input type="hidden" name="reportType" value="FOUND">
@@ -80,12 +129,12 @@
 
                     <div class="row">
                         <div class="field">
-                            <label for="location">Found Location *</label>
+                            <label for="location">Location *</label>
                             <input id="location" name="location" value="${requestScope.form.location}" minlength="3" maxlength="120" required>
                             <div class="error-text" data-error-for="location">${requestScope.errors.location}</div>
                         </div>
                         <div class="field">
-                            <label for="eventDate">Date Found *</label>
+                            <label for="eventDate">Date *</label>
                             <input id="eventDate" type="date" name="eventDate" value="${requestScope.form.eventDate}" required>
                             <div class="error-text" data-error-for="eventDate">${requestScope.errors.eventDate}</div>
                         </div>
