@@ -5,7 +5,7 @@
 <title>Found Items Gallery</title>
 
 <style>
-body { font-family: 'Segoe UI'; background:#facc15; margin:0; color:#111827; }
+body { font-family: 'Segoe UI'; background:#4c0000; margin:0; color:#111827; }
 
 .header {
     text-align:center;

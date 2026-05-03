@@ -8,7 +8,7 @@
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background: #facc15;
+    background: #4c0000;
     display: flex;
     justify-content: center;
     align-items: center;

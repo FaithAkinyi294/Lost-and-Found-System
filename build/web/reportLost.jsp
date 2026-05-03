@@ -41,7 +41,7 @@
                 color: #1d2939;
             }
             :root { color-scheme: light; }
-            body { margin: 0; font-family: Arial, sans-serif; background: #facc15; color: #111827; }
+            body { margin: 0; font-family: Arial, sans-serif; background: #4c0000; color: #111827; }
             .container { max-width: 760px; margin: 24px auto; padding: 16px; }
             .card { background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
             h1 { margin-top: 0; font-size: 1.6rem; }
@@ -231,3 +231,4 @@
         </script>
     </body>
 </html>
+

@@ -44,7 +44,7 @@
             body {
                 margin: 0;
                 font-family: Arial, sans-serif;
-                background: #facc15;
+                background: #4c0000;
                 color: #111827;
             }
             .wrapper {
@@ -325,3 +325,4 @@
         </script>
     </body>
 </html>
+

@@ -23,7 +23,7 @@ if (id == null || id.trim().isEmpty()) {
 body {
     margin: 0;
     font-family: 'Segoe UI', sans-serif;
-    background: #facc15;
+    background: #4c0000;
     color: #111827;
 }
 

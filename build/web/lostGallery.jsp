@@ -7,7 +7,7 @@
 <style>
 body {
     font-family: 'Segoe UI', sans-serif;
-    background: #facc15;
+    background: #4c0000;
     margin: 0;
     color: #111827;
 }

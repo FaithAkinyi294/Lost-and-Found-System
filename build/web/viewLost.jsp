@@ -8,7 +8,7 @@
 body {
     font-family: 'Segoe UI', sans-serif;
     margin: 0;
-    background: #facc15;
+    background: #4c0000;
     color: #111827;
 }
 
