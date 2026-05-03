@@ -44,8 +44,8 @@
             body {
                 margin: 0;
                 font-family: Arial, sans-serif;
-                background: #f5f7fb;
-                color: #1d2939;
+                background: #facc15;
+                color: #111827;
             }
             .wrapper {
                 max-width: 900px;
