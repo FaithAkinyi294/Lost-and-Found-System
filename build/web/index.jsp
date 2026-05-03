@@ -1,73 +1,328 @@
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="java.util.List"%>
+<%@page import="beans.ReportBean, java.util.List"%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Lost and Found Reporting</title>
+        <title>Lost and Found System</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
-            body { margin: 0; font-family: Arial, sans-serif; background: #eef2f7; color: #1f2a37; }
-            .container { max-width: 680px; margin: 28px auto; padding: 16px; }
-            .hero { background: #fff; border-radius: 14px; padding: 26px; box-shadow: 0 3px 10px rgba(0,0,0,.08); text-align: center; }
-            h1 { margin: 0 0 10px; }
-            p { margin: 0 0 18px; color: #526170; }
-            .actions { margin-top: 10px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-            .btn { text-decoration: none; background: #0d6efd; color: #fff; border-radius: 8px; padding: 11px 16px; display: inline-block; min-width: 200px; text-align: center; }
-            .btn.secondary { background: #198754; }
-            .cookie-banner { position: fixed; left: 16px; right: 16px; bottom: 16px; background: #fff; border: 1px solid #d8e1eb; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,.12); padding: 14px; display: none; z-index: 999; }
-            .cookie-banner p { margin: 0 0 10px; font-size: .95rem; color: #2f3e4c; }
-            .cookie-actions { display: flex; gap: 10px; flex-wrap: wrap; }
-            .cookie-btn { border: none; border-radius: 8px; padding: 10px 14px; cursor: pointer; font: inherit; }
-            .cookie-btn.accept { background: #198754; color: #fff; }
-            .cookie-btn.decline { background: #f1f3f5; color: #1f2a37; }
-            @media (max-width: 700px) { .btn { width: 100%; min-width: 0; } }
+            .nav {
+                background: #fff;
+                border-bottom: 1px solid #e4e7ec;
+                padding: 12px 0;
+                position: sticky;
+                top: 0;
+                z-index: 10;
+            }
+            .nav .container {
+                max-width: 900px;
+                margin: 0 auto;
+                padding: 0 16px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .nav .logo {
+                font-weight: bold;
+                font-size: 1.2rem;
+                color: #1d2939;
+            }
+            .nav .menu {
+                display: flex;
+                gap: 20px;
+            }
+            .nav a {
+                color: #475467;
+                text-decoration: none;
+                font-weight: 500;
+            }
+            .nav a:hover {
+                color: #1d2939;
+            }
+            * { box-sizing: border-box; }
+            body {
+                margin: 0;
+                font-family: Arial, sans-serif;
+                background: #4c0000;
+                color: #111827;
+            }
+            .wrapper {
+                max-width: 900px;
+                margin: 0 auto;
+                padding: 36px 16px;
+            }
+            .hero {
+                background: #ffffff;
+                border-radius: 14px;
+                box-shadow: 0 4px 14px rgba(15, 23, 42, 0.08);
+                padding: 34px 24px;
+                text-align: center;
+            }
+            .hero h1 {
+                margin: 0;
+                font-size: 2rem;
+            }
+            .hero p {
+                margin: 12px auto 0;
+                color: #475467;
+                max-width: 640px;
+                line-height: 1.5;
+            }
+            .grid {
+                margin-top: 26px;
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 14px;
+            }
+            .card {
+                background: #fff;
+                border-radius: 12px;
+                border: 1px solid #e4e7ec;
+                padding: 18px;
+                text-align: left;
+            }
+            .card h2 {
+                margin: 0 0 8px;
+                font-size: 1.2rem;
+            }
+            .card p {
+                margin: 0 0 12px;
+                color: #667085;
+            }
+            .btn {
+                display: inline-block;
+                text-decoration: none;
+                font-weight: 700;
+                border-radius: 8px;
+                padding: 10px 14px;
+                color: #fff;
+            }
+            .btn.lost { background: #0d6efd; }
+            .btn.found { background: #198754; }
+            .footer-note {
+                text-align: center;
+                margin-top: 16px;
+                color: #667085;
+                font-size: 0.95rem;
+            }
+            .reports-section h2 {
+                color: #1d2939;
+            }
+            .reports-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                gap: 20px;
+                margin-top: 20px;
+            }
+            .report-card {
+                background: #fff;
+                border-radius: 12px;
+                border: 1px solid #e4e7ec;
+                overflow: hidden;
+                box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+            }
+            .report-image {
+                width: 100%;
+                height: 200px;
+                object-fit: cover;
+            }
+            .cookie-consent {
+                background: #ffffff;
+                border-radius: 12px;
+                border: 1px solid #e4e7ec;
+                padding: 18px;
+                box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+                position: fixed;
+                bottom: 16px;
+                left: 16px;
+                right: 16px;
+                max-width: calc(100% - 32px);
+                z-index: 1000;
+            }
+            .cookie-consent h2 {
+                margin-top: 0;
+            }
+            .cookie-actions {
+                display: flex;
+                gap: 12px;
+                flex-wrap: wrap;
+                margin-top: 16px;
+            }
+            .cookie-actions button {
+                border: none;
+                border-radius: 8px;
+                padding: 10px 16px;
+                font-weight: 700;
+                cursor: pointer;
+            }
+            .cookie-actions button.accept {
+                background: #0d6efd;
+                color: #fff;
+            }
+            .cookie-actions button.reject {
+                background: #e2e8f0;
+                color: #1f2937;
+            }
+            .cookie-status {
+                background: #f8fafc;
+                border: 1px solid #e2e8f0;
+                border-radius: 10px;
+                padding: 12px;
+                margin-top: 12px;
+            }
+            .report-content {
+                padding: 16px;
+            }
+            .report-content h3 {
+                margin: 0 0 8px;
+                font-size: 1.1rem;
+            }
+            .report-type {
+                display: inline-block;
+                padding: 4px 8px;
+                border-radius: 4px;
+                font-size: 0.8rem;
+                font-weight: bold;
+                text-transform: uppercase;
+            }
+            .report-type.lost {
+                background: #fee2e2;
+                color: #dc2626;
+            }
+            .report-type.found {
+                background: #d1fae5;
+                color: #059669;
+            }
+            .description {
+                font-style: italic;
+                color: #667085;
+            }
+            @media (max-width: 760px) {
+                .grid { grid-template-columns: 1fr; }
+                .hero h1 { font-size: 1.6rem; }
+            }
         </style>
     </head>
     <body>
-        <div class="container">
-            <div class="hero">
-                <h1>Welcome to Lost and Found System </h1>
-                <p>Select one option to continue.</p>
-                <div class="actions">
-                    <a class="btn" href="report?type=LOST">Report Lost Item</a>
-                    <a class="btn secondary" href="report?type=FOUND">Report Found Item</a>
+        <nav class="nav">
+            <div class="container">
+                <div class="logo">Lost & Found</div>
+                <div class="menu">
+                    <a href="${pageContext.request.contextPath}/home">Home</a>
+                    <a href="${pageContext.request.contextPath}/report?type=LOST">Report Lost</a>
+                    <a href="${pageContext.request.contextPath}/report?type=FOUND">Report Found</a>
+                </div>
+            </div>
+        </nav>
+        <div class="wrapper">
+            <div class="cookie-consent" id="cookieConsentPanel">
+                <h2>Cookie consent</h2>
+                <p>We use cookies to remember your submission type, session, and site preferences. Please accept or reject cookies for a better experience.</p>
+                <div class="cookie-actions">
+                    <button class="accept" onclick="setCookieConsent('accepted')">Accept Cookies</button>
+                    <button class="reject" onclick="setCookieConsent('rejected')">Reject Cookies</button>
+                </div>
+            </div>
+            <div class="reports-section">
+                <h2 style="text-align: center; margin: 20px 0 12px;">Lost Items</h2>
+                <p style="text-align: center; color: #667085; margin: 0 0 24px;">Browse all lost items that have been reported.</p>
+                <div class="reports-grid">
+                    <%
+                        String error = (String) request.getAttribute("reportError");
+                        if (error != null) {
+                    %>
+                    <p style="text-align: center; color: #dc2626; grid-column: 1 / -1;"><%= error %></p>
+                    <%
+                        } else {
+                            List<ReportBean> reports = (List<ReportBean>) request.getAttribute("recentLostReports");
+                            if (reports == null || reports.isEmpty()) {
+                    %>
+                    <p style="text-align: center; color: #667085; grid-column: 1 / -1;">No lost items have been reported yet.</p>
+                    <%
+                            } else {
+                                for (ReportBean report : reports) {
+                    %>
+                    <div class="report-card">
+                        <% if (report.getImageFileName() != null && !report.getImageFileName().isEmpty()) { %>
+                        <img src="<%= request.getContextPath() %>/uploads/<%= report.getImageFileName() %>" alt="<%= report.getItemName() %>" class="report-image">
+                        <% } %>
+                        <div class="report-content">
+                            <h3><%= report.getItemName() %></h3>
+                            <p class="report-type <%= report.getReportType().toLowerCase() %>"><%= report.getReportType() %></p>
+                            <p><strong>Category:</strong> <%= report.getCategory() %></p>
+                            <p><strong>Location:</strong> <%= report.getLocation() %></p>
+                            <p><strong>Date:</strong> <%= report.getEventDate() %></p>
+                            <p class="description"><%= report.getDescription() %></p>
+                            <p><strong>Contact:</strong> <%= report.getContactEmail() %> | <%= report.getContactPhone() %></p>
+                        </div>
+                    </div>
+                    <%
+                                }
+                            }
+                        }
+                    %>
+                </div>
+            </div>
+
+            <div class="reports-section">
+                <h2 style="text-align: center; margin: 40px 0 20px;">Found Items</h2>
+                <p style="text-align: center; color: #667085; margin: 0 0 24px;">Browse all found items that have been reported.</p>
+                <div class="reports-grid">
+                    <%
+                        if (request.getAttribute("reportError") == null) {
+                            List<ReportBean> foundReports = (List<ReportBean>) request.getAttribute("recentFoundReports");
+                            if (foundReports == null || foundReports.isEmpty()) {
+                    %>
+                    <p style="text-align: center; color: #667085; grid-column: 1 / -1;">No found items have been reported yet.</p>
+                    <%
+                            } else {
+                                for (ReportBean report : foundReports) {
+                    %>
+                    <div class="report-card">
+                        <% if (report.getImageFileName() != null && !report.getImageFileName().isEmpty()) { %>
+                        <img src="<%= request.getContextPath() %>/uploads/<%= report.getImageFileName() %>" alt="<%= report.getItemName() %>" class="report-image">
+                        <% } %>
+                        <div class="report-content">
+                            <h3><%= report.getItemName() %></h3>
+                            <p class="report-type <%= report.getReportType().toLowerCase() %>"><%= report.getReportType() %></p>
+                            <p><strong>Category:</strong> <%= report.getCategory() %></p>
+                            <p><strong>Location:</strong> <%= report.getLocation() %></p>
+                            <p><strong>Date:</strong> <%= report.getEventDate() %></p>
+                            <p class="description"><%= report.getDescription() %></p>
+                            <p><strong>Contact:</strong> <%= report.getContactEmail() %> | <%= report.getContactPhone() %></p>
+                        </div>
+                    </div>
+                    <%
+                                }
+                            }
+                        }
+                    %>
                 </div>
             </div>
         </div>
-        <div id="cookieBanner" class="cookie-banner" role="dialog" aria-live="polite" aria-label="Cookie consent">
-            <p>This site uses cookies to improve your experience. Do you accept cookies?</p>
-            <div class="cookie-actions">
-                <button id="acceptCookies" class="cookie-btn accept" type="button">Accept</button>
-                <button id="declineCookies" class="cookie-btn decline" type="button">Decline</button>
-            </div>
-        </div>
         <script>
-            (function () {
-                const key = "cookieConsentChoice";
-                const banner = document.getElementById("cookieBanner");
-                const acceptBtn = document.getElementById("acceptCookies");
-                const declineBtn = document.getElementById("declineCookies");
-                const existingChoice = sessionStorage.getItem(key);
-
-                if (!existingChoice) {
-                    banner.style.display = "block";
+            function getCookie(name) {
+                const match = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+                return match ? decodeURIComponent(match.pop()) : '';
+            }
+            function setCookieConsent(value) {
+                const path = '<%= request.getContextPath() %>' || '/';
+                document.cookie = 'cookieConsent=' + encodeURIComponent(value) + '; path=' + path + '; max-age=' + (60 * 60 * 24 * 365);
+                const panel = document.getElementById('cookieConsentPanel');
+                if (panel) {
+                    panel.style.display = 'none';
                 }
-
-                function saveChoice(choice) {
-                    sessionStorage.setItem(key, choice);
-                    banner.style.display = "none";
+            }
+            function updateConsentStatus() {
+                const status = getCookie('cookieConsent');
+                const panel = document.getElementById('cookieConsentPanel');
+                if (status && panel) {
+                    panel.style.display = 'none';
                 }
-
-                acceptBtn.addEventListener("click", function () {
-                    saveChoice("accepted");
-                });
-
-                declineBtn.addEventListener("click", function () {
-                    saveChoice("declined");
-                });
-            })();
+            }
+            window.addEventListener('load', updateConsentStatus);
         </script>
     </body>
 </html>
+

@@ -15,6 +15,8 @@ public class ReportBean implements Serializable {
     private String contactEmail;
     private String contactPhone;
     private String imageFileName;
+    private long reportId;
+    private String createdAt;
 
     public String getReportType() {
         return reportType;
@@ -86,5 +88,21 @@ public class ReportBean implements Serializable {
 
     public void setImageFileName(String imageFileName) {
         this.imageFileName = imageFileName;
+    }
+
+    public long getReportId() {
+        return reportId;
+    }
+
+    public void setReportId(long reportId) {
+        this.reportId = reportId;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
     }
 }

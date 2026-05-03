@@ -15,9 +15,10 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="refresh" content="5;url=<%= request.getContextPath() %>/home">
         <title>Submission Successful</title>
         <style>
-            body { margin: 0; font-family: Arial, sans-serif; background: #eef2f7; color: #1f2a37; }
+            body { margin: 0; font-family: Arial, sans-serif; background: #4c0000; color: #111827; }
             .container { max-width: 680px; margin: 28px auto; padding: 16px; }
             .card { background: #fff; border-radius: 14px; padding: 24px; box-shadow: 0 3px 10px rgba(0,0,0,.08); text-align: center; }
             .badge { display: inline-block; padding: 6px 10px; border-radius: 999px; background: #eaf9ef; border: 1px solid #b7ebc5; color: #125d2f; font-weight: 700; margin-bottom: 12px; }
@@ -35,11 +36,13 @@
                 <div class="badge">Success</div>
                 <h1><%= label %> report submitted</h1>
                 <p>Your report has been uploaded successfully.</p>
+                <p style="color: #475467; margin: 0 0 18px;">You will be returned to the homepage automatically in 5 seconds.</p>
                 <div class="actions">
                     <a class="btn" href="<%= request.getContextPath() %>/report?type=<%= type %>">Submit Another <%= label %> Report</a>
-                    <a class="btn secondary" href="<%= request.getContextPath() %>/index.jsp">Back to Home</a>
+                    <a class="btn secondary" href="<%= request.getContextPath() %>/home">Back to Home</a>
                 </div>
             </div>
         </div>
     </body>
 </html>
+

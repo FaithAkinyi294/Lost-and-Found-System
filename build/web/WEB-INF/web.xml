@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="4.0" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd">
+    <context-param>
+        <param-name>db.url</param-name>
+        <param-value>jdbc:mysql://localhost:3306/report?useSSL=false&amp;allowPublicKeyRetrieval=true&amp;serverTimezone=UTC</param-value>
+    </context-param>
+    <context-param>
+        <param-name>db.user</param-name>
+        <param-value>root</param-value>
+    </context-param>
+    <context-param>
+        <param-name>db.password</param-name>
+        <param-value>Bullim@24</param-value>
+    </context-param>
     <servlet>
         <servlet-name>ReportFoundServlet</servlet-name>
         <servlet-class>Servlets.ReportFoundServlet</servlet-class>
@@ -13,8 +25,12 @@
         <servlet-class>Servlets.ReportServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>ReportBean</servlet-name>
-        <servlet-class>beans.ReportBean</servlet-class>
+        <servlet-name>HomeServlet</servlet-name>
+        <servlet-class>Servlets.HomeServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UploadsServlet</servlet-name>
+        <servlet-class>Servlets.UploadsServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ReportFoundServlet</servlet-name>
@@ -33,9 +49,20 @@
         <url-pattern>/report</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>ReportBean</servlet-name>
-        <url-pattern>/ReportBean</url-pattern>
+        <servlet-name>UploadsServlet</servlet-name>
+        <url-pattern>/uploads/*</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>HomeServlet</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>HomeServlet</servlet-name>
+        <url-pattern>/home</url-pattern>
+    </servlet-mapping>
+    <welcome-file-list>
+        <welcome-file>home</welcome-file>
+    </welcome-file-list>
     <session-config>
         <session-timeout>
             30
